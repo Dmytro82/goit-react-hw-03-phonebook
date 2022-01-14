@@ -9,7 +9,9 @@ import { Container, Title, ContainerForm, ContactTitle } from './App.styled';
 
 class App extends Component {
   state = {
+    // при первой загрузке
     contacts: [
+      { id: 'id-01', name: 'GREEN HOUSE (Плай)', number: '0973538467' },
       { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
       { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
       { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
@@ -17,6 +19,21 @@ class App extends Component {
     ],
     filter: '',
   };
+
+  componentDidMount() {
+    const contacts = JSON.parse(localStorage.getItem('contacts'));
+    if (contacts) {
+      this.setState({ contacts: contacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log('add componentDidUpdate');
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   handleFormSubmit = ({ name, number }) => {
     if (this.repeatСontact(name)) {
       alert(`${name} is in the phone book`);
